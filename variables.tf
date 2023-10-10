@@ -3,6 +3,10 @@ variable "cidr_block" {
   
 }
 
+variable "env" {
+  
+}
+
 # optional, because we gave default value
 variable "enable_dns_hostnames" {
   default = true

@@ -6,7 +6,7 @@ resource "aws_vpc" "main" {
   tags = merge(
     var.common_tags,
     {
-        Name = var.project_name
+        Name = "${var.project_name}-${var.env}"
     },
     var.vpc_tags
   )
@@ -19,7 +19,7 @@ resource "aws_internet_gateway" "main" {
   tags = merge(
     var.common_tags,
     {
-        Name = var.project_name
+        Name = "${var.project_name}-${var.env}"
     },
     var.igw_tags
   )
@@ -34,7 +34,7 @@ resource "aws_subnet" "public" {
   tags = merge(
     var.common_tags,
     {
-        Name = "${var.project_name}-public-${local.azs[count.index]}"
+        Name = "${var.project_name}-${var.env}-public-${local.azs[count.index]}"
     }
   )
 }
@@ -47,7 +47,7 @@ resource "aws_subnet" "private" {
   tags = merge(
     var.common_tags,
     {
-        Name = "${var.project_name}-private-${local.azs[count.index]}"
+        Name = "${var.project_name}-${var.env}-private-${local.azs[count.index]}"
     }
   )
 }
@@ -61,7 +61,7 @@ resource "aws_subnet" "database" {
   tags = merge(
     var.common_tags,
     {
-        Name = "${var.project_name}-database-${local.azs[count.index]}"
+        Name = "${var.project_name}-${var.env}-database-${local.azs[count.index]}"
     }
   )
 }
@@ -77,7 +77,7 @@ resource "aws_route_table" "public" {
   tags = merge(
     var.common_tags,
     {
-        Name = "${var.project_name}-public"
+        Name = "${var.project_name}-${var.env}-public"
     }
   )
 }
@@ -100,7 +100,7 @@ resource "aws_nat_gateway" "main" {
   tags = merge(
     var.common_tags,
     {
-        Name = var.project_name
+        Name = "${var.project_name}-${var.env}"
     },
     var.nat_gateway_tags
   )
@@ -121,7 +121,7 @@ resource "aws_route_table" "private" {
   tags = merge(
     var.common_tags,
     {
-        Name = "${var.project_name}-private"
+        Name = "${var.project_name}-${var.env}-private"
     },
     var.private_route_table_tags
   )
@@ -144,7 +144,7 @@ resource "aws_route_table" "database" {
   tags = merge(
     var.common_tags,
     {
-        Name = "${var.project_name}-database"
+        Name = "${var.project_name}-${var.env}-database"
     },
     var.database_route_table_tags
   )
@@ -175,13 +175,13 @@ resource "aws_route_table_association" "database" {
 }
 
 resource "aws_db_subnet_group" "roboshop" {
-  name       = var.project_name
+  name       = "${var.project_name}-${var.env}"
   subnet_ids = aws_subnet.database[*].id
 
   tags = merge(
     var.common_tags,
     {
-        Name = var.project_name
+        Name = "${var.project_name}-${var.env}"
     },
     var.db_subnet_group_tags
   )
